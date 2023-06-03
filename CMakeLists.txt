@@ -237,6 +237,7 @@ configure_file("${CMAKE_SOURCE_DIR}/wine-sbcl.sh.tmpl" "${CMAKE_BINARY_DIR}/wine
 externalproject_add(maxima
   # first copy the maxima source to a build directory, since out-of-source-builds do not work
 #  DOWNLOAD_COMMAND rsync -a --exclude=crosscompile-windows/build/ "${CMAKE_SOURCE_DIR}/maxima-prefix/"  "${CMAKE_BINARY_DIR}/maxima-prefix/src/maxima"
+  GIT_REPOSITORY git://git.code.sf.net/p/maxima/code maxima-prefix
   DEPENDS clisp sbcl tcl tk texinfo ${ABCL_DEPENDS}
   BUILD_IN_SOURCE 1
   CONFIGURE_COMMAND sh -c "test -x ./bootstrap && ./bootstrap || return 0"
