@@ -119,8 +119,9 @@ if(BUILD_CURRENT)
     set(USE_WXMAXIMA_GIT YES)
     set(MAXIMAVERSION "current")
 else()
+    git checkout 5.47.0
     # Get Maxima version from configure.ac
-    file(STRINGS "${CMAKE_SOURCE_DIR}/../configure.ac" CONFIGUREAC REGEX "AC_INIT\\(.*\\)")
+    file(STRINGS "${CMAKE_SOURCE_DIR}/maxima-code/configure.ac" CONFIGUREAC REGEX "AC_INIT\\(.*\\)")
     string(REGEX REPLACE "AC_INIT\\(\\[maxima\\],[ \t\r\n]*\\[(.*)\\]\\)" "\\1" MAXIMAVERSION ${CONFIGUREAC})
     message(STATUS "Maxima version (from configure.ac): ${MAXIMAVERSION}")
 endif()
@@ -132,7 +133,7 @@ endif()
 # share/maxima/5.45.1/doc/html/maxima_singlepage.html
 # Set it first to the second variant, if Git is found and we are building
 # from a Git tree use the result of "git describe --dirty" in the path instead - where
-# "-" are changed to "_" (see commit d5d04f2 and the file '../configure.ac').
+# "-" are changed to "_" (see commit d5d04f2 and the file 'maxima-code/configure.ac').
 set(MAXIMA_SINGLEPAGE_HTML "share/maxima/${MAXIMAVERSION}/doc/html/maxima_singlepage.html")
 find_package(Git)
 if(Git_FOUND)
@@ -236,7 +237,7 @@ configure_file("${CMAKE_SOURCE_DIR}/wine-sbcl.sh.tmpl" "${CMAKE_BINARY_DIR}/wine
 
 externalproject_add(maxima
   # first copy the maxima source to a build directory, since out-of-source-builds do not work
-  DOWNLOAD_COMMAND rsync -a --exclude=crosscompile-windows/build/ "${CMAKE_SOURCE_DIR}/../"  "${CMAKE_BINARY_DIR}/maxima-prefix/src/maxima"
+  DOWNLOAD_COMMAND rsync -a --exclude=crosscompile-windows/build/ "${CMAKE_SOURCE_DIR}/maxima-code/"  "${CMAKE_BINARY_DIR}/maxima-prefix/src/maxima"
   DEPENDS clisp sbcl tcl tk texinfo ${ABCL_DEPENDS}
   BUILD_IN_SOURCE 1
   CONFIGURE_COMMAND sh -c "test -x ./bootstrap && ./bootstrap || return 0"
@@ -253,8 +254,8 @@ externalproject_add(maxima
 option(STRIP_HELPERPROGRAMS "Strip the included helper programs (winkill, winkill_lib, maxima_longnames)." YES)
 
 # crosscompiling winkill with autoconf does not work, compile it using CMake.
-add_library(winkill_lib SHARED ${CMAKE_SOURCE_DIR}/../interfaces/xmaxima/win32/winkill_lib.c)
-add_executable(winkill ${CMAKE_SOURCE_DIR}/../interfaces/xmaxima/win32/winkill.c)
+add_library(winkill_lib SHARED ${CMAKE_SOURCE_DIR}/maxima-code/interfaces/xmaxima/win32/winkill_lib.c)
+add_executable(winkill ${CMAKE_SOURCE_DIR}/maxima-code/interfaces/xmaxima/win32/winkill.c)
 set_target_properties(winkill_lib PROPERTIES PREFIX "") # remove 'lib' prefix from libwinkill_lib.dll
 target_link_libraries(winkill winkill_lib)
 
@@ -268,7 +269,7 @@ if(STRIP_HELPERPROGRAMS)
     add_custom_command(TARGET maxima_longnames POST_BUILD COMMAND ${CMAKE_STRIP} maxima_longnames.exe)
 endif()
 install(TARGETS winkill winkill_lib maxima_longnames COMPONENT Maxima RUNTIME DESTINATION bin LIBRARY DESTINATION bin/)
-install(FILES "${CMAKE_SOURCE_DIR}/../interfaces/xmaxima/win32/win_signals.lisp" DESTINATION bin/ COMPONENT Maxima)
+install(FILES "${CMAKE_SOURCE_DIR}/maxima-code/interfaces/xmaxima/win32/win_signals.lisp" DESTINATION bin/ COMPONENT Maxima)
 
 
 install(DIRECTORY ${CMAKE_BINARY_DIR}/maxima-installroot/${WINDOWS_DRIVELETTER}:/maxima-${MAXIMAVERSION}/
@@ -292,7 +293,7 @@ install(FILES "${MINGW_LIBSTDCPP}" "${MINGW_LIBGCC}" DESTINATION bin/ COMPONENT 
 configure_file("${CMAKE_SOURCE_DIR}/licenses.html" "${CMAKE_BINARY_DIR}/licenses.html")
 install(FILES "${CMAKE_BINARY_DIR}/licenses.html" DESTINATION share/doc/ COMPONENT Maxima)
 
-file(COPY "${CMAKE_SOURCE_DIR}/../COPYING" DESTINATION "${CMAKE_BINARY_DIR}")
+file(COPY "${CMAKE_SOURCE_DIR}/maxima-code/COPYING" DESTINATION "${CMAKE_BINARY_DIR}")
 file(READ "${CMAKE_SOURCE_DIR}/LICENSE_APPENDIX.txt" LICENSE_APPENDIX)
 file(APPEND "${CMAKE_BINARY_DIR}/COPYING" "${LICENSE_APPENDIX}")
 
@@ -300,13 +301,13 @@ set(CPACK_GENERATOR "NSIS;ZIP")
 set(CPACK_PACKAGE_VERSION "${MAXIMAVERSION}")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Maxima")
 set(CPACK_PACKAGE_VENDOR "Maxima Team")
-set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_SOURCE_DIR}/../README")
+set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_SOURCE_DIR}/maxima-code/README")
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_BINARY_DIR}/COPYING")
 set(CPACK_PACKAGE_INSTALL_DIRECTORY "maxima-${CPACK_PACKAGE_VERSION}")
 set(CPACK_NSIS_INSTALL_ROOT "${WINDOWS_DRIVELETTER}:")
 set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
 set(CPACK_PACKAGE_ICON "${CMAKE_SOURCE_DIR}/maxima-icon.bmp")
-set(CPACK_NSIS_MUI_ICON "${CMAKE_SOURCE_DIR}/../interfaces/xmaxima\\\\maxima-icon.ico")
+set(CPACK_NSIS_MUI_ICON "${CMAKE_SOURCE_DIR}/maxima-code/interfaces/xmaxima\\\\maxima-icon.ico")
 set(CPACK_NSIS_MUI_UNIICON "${CPACK_NSIS_MUI_ICON}")
 set(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\maxima-command.ico")
 set(CPACK_NSIS_DISPLAY_NAME "Maxima computer algebra system")
