@@ -27,7 +27,7 @@ jobs:
              update-alternatives --config x86_64-w64-mingw32-gcc
       - name: Clone maxima
         run: |
-             git clone ssh://peterpall@git.code.sf.net/p/maxima/code maxima-code
+             git clone git://git.code.sf.net/p/maxima/code maxima-code
       - name: Nightly build
         run: |
              ./nightlybuild.sh
