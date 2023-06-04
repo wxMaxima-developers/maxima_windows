@@ -35,9 +35,15 @@ jobs:
              mkdir build
              cd build
              cmake -DBUILD_CURRENT=YES -DWITH_ABCL=NO -DBUILD_64BIT=YES ..
+             cd ..
       - name: Build the Nightly build
         run: |
+             cd build
              make
+             cd ..
       - name: Build the windows installer
         run: |
+             cd build
              make package
+             cd
+
