@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout_git
+      - name: Checkout Git
         uses: actions/checkout@v3
         with:
           # We must fetch at least the immediate parents so that if this is
@@ -25,6 +25,9 @@ jobs:
              sudo apt-get install appstream-util cmake desktop-file-utils doxygen gettext gnuplot gnuplot-x11 graphviz libwxgtk3.0-gtk3-dev libwxgtk-webview3.0-gtk3-dev xvfb at-spi2-core g++-mingw-w64-x86-64 cmake nsis wine automake texlive texlive-plain-generic texlive-xetex rsync p7zip-full g++ gettext python3 tcl pandoc po4a git build-essential
              update-alternatives --config x86_64-w64-mingw32-g++
              update-alternatives --config x86_64-w64-mingw32-gcc
+      - name: Checkout maxima
+        run: |
+             git clone git://git.code.sf.net/p/maxima/code maxima-code
       - name: Nightly build
         run: |
              ./nightlybuild.sh
