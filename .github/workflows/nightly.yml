@@ -9,7 +9,7 @@ permissions:
   contents: read
 
 jobs:
-  64Bit:
+  Build_64Bit:
     runs-on: ubuntu-latest
 
     steps:
