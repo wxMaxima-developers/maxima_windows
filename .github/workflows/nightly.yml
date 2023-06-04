@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   Build_64Bit:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     steps:
       - name: Checkout Git
