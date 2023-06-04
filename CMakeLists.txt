@@ -238,6 +238,7 @@ externalproject_add(maxima
   # first copy the maxima source to a build directory, since out-of-source-builds do not work
 #  DOWNLOAD_COMMAND rsync -a --exclude=crosscompile-windows/build/ "${CMAKE_SOURCE_DIR}/maxima-prefix/"  "${CMAKE_BINARY_DIR}/maxima-prefix/src/maxima"
   GIT_REPOSITORY git://git.code.sf.net/p/maxima/code maxima-prefix
+  GIT_TAG master
   DEPENDS clisp sbcl tcl tk texinfo ${ABCL_DEPENDS}
   BUILD_IN_SOURCE 1
   CONFIGURE_COMMAND sh -c "test -x ./bootstrap && ./bootstrap || return 0"
@@ -293,15 +294,15 @@ install(FILES "${MINGW_LIBSTDCPP}" "${MINGW_LIBGCC}" DESTINATION bin/ COMPONENT 
 configure_file("${CMAKE_SOURCE_DIR}/licenses.html" "${CMAKE_BINARY_DIR}/licenses.html")
 install(FILES "${CMAKE_BINARY_DIR}/licenses.html" DESTINATION share/doc/ COMPONENT Maxima)
 
-file(COPY "${CMAKE_SOURCE_DIR}/maxima/COPYING" DESTINATION "${CMAKE_BINARY_DIR}")
-file(READ "${CMAKE_SOURCE_DIR}/LICENSE_APPENDIX.txt" LICENSE_APPENDIX)
-file(APPEND "${CMAKE_BINARY_DIR}/COPYING" "${LICENSE_APPENDIX}")
+#file(COPY "${CMAKE_SOURCE_DIR}/maxima/COPYING" DESTINATION "${CMAKE_BINARY_DIR}")
+#file(READ "${CMAKE_SOURCE_DIR}/LICENSE_APPENDIX.txt" LICENSE_APPENDIX)
+#file(APPEND "${CMAKE_BINARY_DIR}/COPYING" "${LICENSE_APPENDIX}")
 
 set(CPACK_GENERATOR "NSIS;ZIP")
 set(CPACK_PACKAGE_VERSION "${MAXIMAVERSION}")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Maxima")
 set(CPACK_PACKAGE_VENDOR "Maxima Team")
-set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_SOURCE_DIR}/maxima-prefix/README")
+#set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_SOURCE_DIR}/maxima-prefix/README")
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_BINARY_DIR}/COPYING")
 set(CPACK_PACKAGE_INSTALL_DIRECTORY "maxima-${CPACK_PACKAGE_VERSION}")
 set(CPACK_NSIS_INSTALL_ROOT "${WINDOWS_DRIVELETTER}:")
