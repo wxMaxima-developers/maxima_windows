@@ -61,5 +61,4 @@ test -x $CMAKE || exit
 
 mkdir build
 cd build || exit
-buildprocess "win32" 2>&1 | tee ~/buildlog-win32
 buildprocess "win64" 2>&1 | tee ~/buildlog-win64
