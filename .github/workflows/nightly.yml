@@ -30,4 +30,6 @@ jobs:
              git clone git://git.code.sf.net/p/maxima/code maxima-code
       - name: Nightly build
         run: |
-             ./nightlybuild.sh
+             mkdir build
+             cd build
+             cmake -DBUILD_CURRENT=YES -DWITH_ABCL=NO -DBUILD_64BIT=YES ..
