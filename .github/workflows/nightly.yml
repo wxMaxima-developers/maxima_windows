@@ -1,4 +1,4 @@
-name: Compile 64Bit
+name: Nightly build
 
 on: [push]
 
@@ -9,7 +9,7 @@ permissions:
   contents: read
 
 jobs:
-  compile:
+  64Bit:
     runs-on: ubuntu-latest
 
     steps:
